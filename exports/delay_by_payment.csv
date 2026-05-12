@@ -1,0 +1,5 @@
+payment_type,total_orders,delayed_orders,delay_percentage
+boleto,19191,1704,8.88
+credit_card,74585,5932,7.95
+debit_card,1485,118,7.95
+voucher,5493,372,6.77
