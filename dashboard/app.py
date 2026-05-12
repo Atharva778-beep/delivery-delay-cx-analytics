@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 from pathlib import Path
 
+
 st.set_page_config(
     page_title="Delivery Delay Dashboard",
     page_icon="📦",
@@ -12,30 +13,49 @@ st.set_page_config(
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 EXPORTS = BASE_DIR / "exports"
-ACCENT = "#0F766E"
-ACCENT_LIGHT = "#14B8A6"
+
+ACCENT = "#0EA5A4"
+ACCENT_LIGHT = "#38BDF8"
+
 
 @st.cache_data
 def load_csv(name):
     return pd.read_csv(EXPORTS / name)
 
+
 st.markdown("""
 <style>
-.block-container {
-    padding-top: 1.5rem;
-    padding-bottom: 1rem;
+header[data-testid="stHeader"] {
+    background: rgba(255, 255, 255, 0);
 }
+
+[data-testid="stAppViewContainer"] {
+    background: linear-gradient(180deg, #F8FAFC 0%, #EEF4F8 100%);
+}
+
+.block-container {
+    padding-top: 3.2rem !important;
+    padding-bottom: 1.2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
 .main-title {
     font-size: 34px;
     font-weight: 700;
     color: #0F172A;
-    margin-bottom: 0.15rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    line-height: 1.25;
 }
+
 .sub-title {
     font-size: 15px;
     color: #475569;
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
 }
+
 .section-title {
     font-size: 22px;
     font-weight: 600;
@@ -43,26 +63,88 @@ st.markdown("""
     margin-top: 0.5rem;
     margin-bottom: 0.8rem;
 }
-div[data-testid="metric-container"] {
-    background: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    padding: 18px;
-    border-radius: 14px;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+
+section[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
+
+section[data-testid="stSidebar"] * {
+    color: #F8FAFC !important;
+}
+
+section[data-testid="stSidebar"] .stRadio label {
+    color: #E2E8F0 !important;
+}
+
+div[data-testid="metric-container"] {
+    background: linear-gradient(180deg, #FFFFFF 0%, #F8FBFD 100%);
+    border: 1px solid #DCE6EE;
+    padding: 18px;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+div[data-testid="stInfo"] {
+    background: #ECFEFF;
+    border: 1px solid #A5F3FC;
+    color: #164E63;
+    border-radius: 12px;
+}
+
 div[data-testid="stDataFrame"] {
     border: 1px solid #E2E8F0;
     border-radius: 12px;
     overflow: hidden;
+    background: #FFFFFF;
+}
+
+div.stButton > button {
+    background: #0F766E;
+    color: white;
+    border: none;
+    border-radius: 10px;
+}
+
+div.stButton > button:hover {
+    background: #115E59;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .block-container {
+        padding-top: 4.2rem !important;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .main-title {
+        font-size: 28px;
+        line-height: 1.3;
+    }
+
+    .sub-title {
+        font-size: 14px;
+    }
+
+    .section-title {
+        font-size: 20px;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="main-title">Delivery Delay Analysis Dashboard</div>', unsafe_allow_html=True)
+
+st.markdown(
+    '<div class="main-title">Delivery Delay Analysis Dashboard</div>',
+    unsafe_allow_html=True
+)
+
 st.markdown(
     '<div class="sub-title">Business dashboard for exploring delivery delay trends across time, location, product categories, and payment types.</div>',
     unsafe_allow_html=True
 )
+
 
 with st.sidebar:
     st.header("Navigation")
@@ -78,6 +160,7 @@ with st.sidebar:
         ]
     )
 
+
 def style_plot(fig):
     fig.update_layout(
         template="plotly_white",
@@ -91,6 +174,7 @@ def style_plot(fig):
     fig.update_xaxes(showgrid=True, gridcolor="#E2E8F0")
     fig.update_yaxes(showgrid=True, gridcolor="#E2E8F0")
     return fig
+
 
 if page == "Overview":
     st.markdown('<div class="section-title">Executive Overview</div>', unsafe_allow_html=True)
@@ -114,6 +198,7 @@ if page == "Overview":
     except Exception as e:
         st.error(f"Could not load overview data: {e}")
 
+
 elif page == "Monthly Trend":
     st.markdown('<div class="section-title">Monthly Trend</div>', unsafe_allow_html=True)
 
@@ -133,6 +218,7 @@ elif page == "Monthly Trend":
     st.plotly_chart(fig, use_container_width=True)
     st.dataframe(df, use_container_width=True)
 
+
 elif page == "State Analysis":
     st.markdown('<div class="section-title">State Analysis</div>', unsafe_allow_html=True)
 
@@ -150,6 +236,7 @@ elif page == "State Analysis":
 
     st.plotly_chart(fig, use_container_width=True)
     st.dataframe(df, use_container_width=True)
+
 
 elif page == "City Analysis":
     st.markdown('<div class="section-title">City Analysis</div>', unsafe_allow_html=True)
@@ -169,6 +256,7 @@ elif page == "City Analysis":
     st.plotly_chart(fig, use_container_width=True)
     st.dataframe(df, use_container_width=True)
 
+
 elif page == "Category Analysis":
     st.markdown('<div class="section-title">Category Analysis</div>', unsafe_allow_html=True)
 
@@ -187,6 +275,7 @@ elif page == "Category Analysis":
 
     st.plotly_chart(fig, use_container_width=True)
     st.dataframe(df, use_container_width=True)
+
 
 elif page == "Payment Analysis":
     st.markdown('<div class="section-title">Payment Analysis</div>', unsafe_allow_html=True)
